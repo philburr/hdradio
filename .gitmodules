@@ -1,0 +1,3 @@
+[submodule "external/ffts"]
+	path = external/ffts
+	url = https://github.com/anthonix/ffts.git
