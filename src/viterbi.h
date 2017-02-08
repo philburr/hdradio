@@ -28,7 +28,7 @@ namespace HDRadio {
                 struct path_manager {
 
                     path_manager() {
-                        path.resize(4, 0);
+                        path.resize(2, 0);
                         bitpos = 0;
                     }
 
@@ -64,7 +64,6 @@ namespace HDRadio {
                 struct viterbi_state {
                     path_manager path;
                     uint32_t metric;
-                    uint32_t state;
                 };
 
 
@@ -89,13 +88,11 @@ namespace HDRadio {
                     {
                         next[2*i].metric = m0;
                         next[2*i].path.zero(state[i].path);
-                        next[2*i].state = state[i].state;
                     }
                     else
                     {
                         next[2*i].metric = m1;
                         next[2*i].path.zero(state[i+32].path);
-                        next[2*i].state = state[i+32].state;
                     }
 
                     auto m2 = state[i].metric + metrics[encode_state[2*i + 1]];
@@ -104,13 +101,11 @@ namespace HDRadio {
                     {
                         next[2*i+1].metric = m2;
                         next[2*i+1].path.one(state[i].path);
-                        next[2*i+1].state = state[i].state;
                     }
                     else
                     {
                         next[2*i+1].metric = m3;
                         next[2*i+1].path.one(state[i+32].path);
-                        next[2*i+1].state = state[i+32].state;
                     }
                 }
 

@@ -39,8 +39,6 @@ viterbi::viterbi(hdr_parameters& p, uint32_t transfer_size)
     {
         encode_state[i] = calc_1_3(i);
     }
-    for (auto i = 0; i < state.size(); i++)
-        state[i].state = i;
 }
 
 uint8_t viterbi::calc_1_3(uint8_t state)
@@ -173,7 +171,7 @@ void viterbi::process(std::vector<uint8_t>data, std::function<void(std::vector<u
             }
 
             // No point in searching for the maximum if there aren't enough bits ready to spit out
-            if (state[0].path.bitpos == 128)
+            if (state[0].path.bitpos == 64)
             {
                 uint32_t best = state[0].path.get();
                 uint32_t best_metric = state[0].metric;

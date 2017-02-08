@@ -76,23 +76,29 @@ void sync_fine::extract_pilot_bits()
         int bc = (pilot >> 12) & 15;
         int mode = (pilot >> 1) & 0x3f;
 
-        bc_count[bc] += 1;
-        mode_count[mode] += 1;
-
-        if (bc_count[bc] > highest_bc_count) {
-            highest_bc_count = bc_count[bc];
-            highest_bc = bc;
+        if (parameters.parity[bc] == ((pilot>>11) & 1))
+        {
+            bc_count[bc] += 1;
+            if (bc_count[bc] > highest_bc_count) {
+                highest_bc_count = bc_count[bc];
+                highest_bc = bc;
+            }
         }
 
-        if (mode_count[mode] > highest_mode_count) {
-            highest_mode_count = mode_count[mode];
-            highest_mode = mode;
+        if (parameters.parity[(pilot >> 1) & 0xff] == (pilot & 1))
+        {
+            mode_count[mode] += 1;
+
+            if (mode_count[mode] > highest_mode_count) {
+                highest_mode_count = mode_count[mode];
+                highest_mode = mode;
+            }
         }
     }
 
     mode = highest_mode;
     block_count = highest_bc;
-    if (mode != 1) {
+    if (mode != 1 && mode != -1) {
         printf("This program only has support for MP1 transmissions\n");
         exit(0);
     }
